@@ -1,4 +1,5 @@
 # Final Project
 
 Add your names here
-Sukrit Dev Dhawan
+* Sukrit Dev Dhawan
+* Arjun Singh Gill
