@@ -8,10 +8,31 @@ import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
 
-public class CreateUserHandler implements BaseHandler{
+import java.util.List;
 
-  @Override
-  public HttpResponseBuilder handleRequest(ParsedRequest request) {
-    return null; // todo
-  }
+import static handler.GsonTool.gson;
+
+public class CreateUserHandler implements BaseHandler {
+
+    @Override
+    public HttpResponseBuilder handleRequest(ParsedRequest request) {
+        var userDto = gson.fromJson(request.getBody(), UserDto.class);
+        var userDao = UserDao.getInstance();
+        List<UserDto> userLookup = userDao.query(new Document("userName", userDto.getUserName()));
+
+        RestApiAppResponse<UserDto> resp;
+        String status;
+
+        if (!userLookup.isEmpty()) {
+            resp = new RestApiAppResponse<>(false, null, "Username already taken");
+            status = StatusCodes.OK;
+        } else {
+            userDto.setPassword(DigestUtils.sha256Hex(userDto.getPassword()));
+            userDao.put(userDto);
+            resp = new RestApiAppResponse<>(true, null, "User created");
+            status = StatusCodes.OK; // StatusCodes.BAD_REQUEST;
+        }
+
+        return new HttpResponseBuilder().setStatus(status).setBody(resp);
+    }
 }

@@ -3,24 +3,47 @@ package handler;
 import dao.AuthDao;
 import dao.UserDao;
 import dto.AuthDto;
-import java.time.Instant;
-import java.util.Map;
+import dto.UserDto;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import request.ParsedRequest;
-import response.CustomHttpResponse;
 import response.HttpResponseBuilder;
 
-class LoginDto{
-  String userName;
-  String password;
+import java.time.Instant;
+
+import static handler.GsonTool.gson;
+
+class LoginDto {
+    String userName;
+    String password;
 }
 
-public class LoginHandler implements BaseHandler{
+public class LoginHandler implements BaseHandler {
 
-  @Override
-  public HttpResponseBuilder handleRequest(ParsedRequest request) {
-    return null; // todo
-  }
+    @Override
+    public HttpResponseBuilder handleRequest(ParsedRequest request) {
+        var userDto = gson.fromJson(request.getBody(), UserDto.class);
+        var userDao = UserDao.getInstance();
+        var userLookup = userDao.query(
+                new Document()
+                        .append("userName", userDto.getUserName())
+                        .append("password", DigestUtils.sha256Hex(userDto.getPassword()))
+        );
+
+        if (userLookup.isEmpty()) {
+            return new HttpResponseBuilder().setStatus(StatusCodes.UNAUTHORIZED);
+        }
+
+        var authDto = new AuthDto();
+        var authDao = AuthDao.getInstance();
+        var expireTime = Instant.now().getEpochSecond() + 6000; // 10 minutes
+        var hash = DigestUtils.sha256Hex(authDto.getUniqueId() + expireTime);
+        authDto.setExpireTime(expireTime);
+        authDto.setHash(hash);
+        authDto.setUserName(userDto.getUserName());
+        authDao.put(authDto);
+
+        return new HttpResponseBuilder().setStatus(StatusCodes.OK)
+                .setHeader("Set-Cookie", "auth=" + hash);
+    }
 }
