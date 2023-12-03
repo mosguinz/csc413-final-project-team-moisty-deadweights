@@ -11,6 +11,7 @@ public class HandlerFactory {
             case "/getTransactions" -> new GetTransactionsHandler();
             case "/login" -> new LoginHandler();
             case "/withdraw" -> new WithdrawHandler();
+            case "/request" -> new CreateRequestHandler();
             default -> new FallbackHandler();
         };
     }
