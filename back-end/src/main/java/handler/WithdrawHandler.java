@@ -11,12 +11,40 @@ import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
 
 import java.util.List;
-import java.util.Optional;
 
-public class WithdrawHandler  implements BaseHandler {
+import static handler.GsonTool.gson;
+
+public class WithdrawHandler implements BaseHandler {
 
     @Override
     public HttpResponseBuilder handleRequest(ParsedRequest request) {
-        return null; // todo
+        System.out.println(request.getBody());
+
+        var authLookup = AuthFilter.doFilter(request);
+        if (!authLookup.isLoggedIn) {
+            return new HttpResponseBuilder().setStatus(StatusCodes.UNAUTHORIZED);
+        }
+
+        var userDao = UserDao.getInstance();
+        var userQuery = userDao.query(new Document("userName", authLookup.userName));
+        if (userQuery.size() != 1) {
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+        }
+
+        var txDto = gson.fromJson(request.getBody(), TransactionDto.class);
+        UserDto userDto = userQuery.get(0);
+        if (userDto.getBalance() < txDto.getAmount()) {
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+        }
+
+        var txDao = TransactionDao.getInstance();
+        userDto.setBalance(userDto.getBalance() - txDto.getAmount());
+        userDao.put(userDto);
+        txDto.setTransactionType(TransactionType.Withdraw);
+        txDto.setUserId(userDto.getUserName());
+        txDao.put(txDto);
+
+        var resp = new RestApiAppResponse<>(true, List.of(txDto), null);
+        return new HttpResponseBuilder().setStatus(StatusCodes.OK).setBody(resp);
     }
 }
