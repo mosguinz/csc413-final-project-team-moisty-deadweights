@@ -13,6 +13,7 @@ public class HandlerFactory {
             case "/login" -> new LoginHandler();
             case "/withdraw" -> new WithdrawHandler();
             case "/request" -> new CreateRequestHandler();
+            case "/resolveRequest" -> new ResolveRequestsHandler();
             default -> new FallbackHandler();
         };
     }

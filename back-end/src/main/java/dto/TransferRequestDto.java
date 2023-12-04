@@ -70,16 +70,26 @@ public class TransferRequestDto extends BaseDto {
 	public Document toDocument() {
         return new Document()
                 .append("amount", this.amount)
+                .append("fromUserName", this.fromUserName)
                 .append("fromId", this.fromId)
-                .append("toId", this.toUserName);
+                .append("toUserName", this.toUserName)
+                .append("toId", this.toUserName)
+                .append("status", this.status);
     }
 
     public static TransferRequestDto fromDocument(Document match) {
         TransferRequestDto transferRequestDto = new TransferRequestDto();
         transferRequestDto.amount = match.getDouble("amount");
+        transferRequestDto.fromUserName = match.getString("fromUserName");
         transferRequestDto.fromId = match.getString("fromId");
         transferRequestDto.toUserName = match.getString("toUserName");
         transferRequestDto.toId = match.getString("toId");
+        transferRequestDto.status = switch (match.get("status").toString()) {
+            case "Sent" -> RequestStatus.Sent;
+            case "Accepted" -> RequestStatus.Accepted;
+            case "Rejected" -> RequestStatus.Rejected;
+            default -> RequestStatus.Sent;
+        };
         return transferRequestDto;
     }
 }
