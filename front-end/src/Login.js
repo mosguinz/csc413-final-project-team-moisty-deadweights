@@ -62,10 +62,10 @@ export default function Login() {
             //.then((res) => res.json()) // it worked, parse result
             .then((apiRes) => {
                 console.log(apiRes);
-                if(apiRes.ok){
+                if (apiRes.ok) {
                     console.log('Login worked');
                     setShouldRedirect(true);
-                }else{
+                } else {
                     setMessage('Failed to log in');
                 }
                 console.log('Worked'); // RestApiAppResponse
@@ -78,7 +78,7 @@ export default function Login() {
     }
 
     // redirect
-    if(shouldRedirect){
+    if (shouldRedirect) {
         return <Navigate to="/home" replace={true} />;
     }
 
