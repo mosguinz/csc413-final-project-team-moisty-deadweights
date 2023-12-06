@@ -54,7 +54,8 @@ export default function Login() {
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Log In</h1>
+            <p>Don't have an account yet? <a href='/registration'>Create an account</a>.</p>
             {message}
             <form>
                 <div class="row mb-3">

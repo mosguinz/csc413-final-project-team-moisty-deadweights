@@ -47,6 +47,7 @@ export default function RegistrationPage() {
     return (
         <div>
             <h1>Registration</h1>
+            <p>Already have an account? <a href='/login'>Log in instead</a>.</p>
             {message}
             <form>
                 <div class="row mb-3">
