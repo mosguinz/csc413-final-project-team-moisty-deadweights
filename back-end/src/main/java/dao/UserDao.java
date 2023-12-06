@@ -1,6 +1,7 @@
 package dao;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import dto.UserDto;
 import org.bson.Document;
 
@@ -14,6 +15,9 @@ public class UserDao extends BaseDao<UserDto> {
 
     private UserDao(MongoCollection<Document> collection) {
         super(collection);
+        Document field = new Document();
+        field.append("userName", "text");
+        this.collection.createIndex(field);
     }
 
     public static UserDao getInstance() {
@@ -33,5 +37,10 @@ public class UserDao extends BaseDao<UserDto> {
         List<Document> res = collection.find(filter).into(new ArrayList<>());
         return res.stream().map(UserDto::fromDocument).collect(Collectors.toList());
     }
+    public List<UserDto> searchUser(String searchTerm) {
+        List<Document> res = this.collection.find(Filters.regex("userName", ".*" + searchTerm + ".*", "i")).into(new ArrayList<>());
+        return res.stream().map(UserDto::fromDocument).collect(Collectors.toList());
+    }
+
 
 }
