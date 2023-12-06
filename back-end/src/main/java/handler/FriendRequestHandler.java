@@ -12,8 +12,9 @@ public class FriendRequestHandler implements BaseHandler {
 
     private final FriendRequestDao friendRequestDao;
 
-    public FriendRequestHandler(FriendRequestDao friendRequestDao) {
-        this.friendRequestDao = friendRequestDao;
+    public FriendRequestHandler() {
+        // Obtain the DAO instance internally, assuming singleton pattern
+        this.friendRequestDao = FriendRequestDao.getInstance();
     }
 
     @Override

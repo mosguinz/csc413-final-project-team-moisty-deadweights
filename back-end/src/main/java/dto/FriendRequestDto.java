@@ -1,8 +1,8 @@
 package dto;
 
 import org.bson.Document;
+import java.util.List;
 public class FriendRequestDto extends BaseDto {
-
     private String senderId;
     private String receiverId;
     private RequestStatus status;
@@ -41,6 +41,8 @@ public class FriendRequestDto extends BaseDto {
         this.status = status;
     }
 
+
+
     // Convert DTO to MongoDB Document
     public Document toDocument() {
         return new Document()
@@ -51,10 +53,10 @@ public class FriendRequestDto extends BaseDto {
 
     // Convert MongoDB Document to DTO
     public static FriendRequestDto fromDocument(Document document) {
-        FriendRequestDto friendRequestDto = new FriendRequestDto();
-        friendRequestDto.senderId = document.getString("senderId");
-        friendRequestDto.receiverId = document.getString("receiverId");
-        friendRequestDto.status = RequestStatus.valueOf(document.getString("status"));
-        return friendRequestDto;
+        FriendRequestDto dto = new FriendRequestDto();
+        dto.senderId = document.getString("senderId");
+        dto.receiverId = document.getString("receiverId");
+        dto.status = RequestStatus.valueOf(document.getString("status"));
+        return dto;
     }
 }

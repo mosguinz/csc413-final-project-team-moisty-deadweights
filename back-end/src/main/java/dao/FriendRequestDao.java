@@ -2,6 +2,7 @@ package dao;
 
 import com.mongodb.client.MongoCollection;
 import dto.FriendRequestDto;
+import dto.RequestStatus;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -53,5 +54,17 @@ public class FriendRequestDao extends BaseDao<FriendRequestDto> {
                 .append("receiverId", receiverId);
         List<FriendRequestDto> result = query(filter);
         return result.isEmpty() ? null : result.get(0);
+    }
+    public void deleteFriendRequest(String senderId, String receiverId) {
+        Document filter = new Document("senderId", senderId)
+                .append("receiverId", receiverId);
+        collection.deleteOne(filter);
+    }
+
+    public void updateFriendRequestStatus(String senderId, String receiverId, RequestStatus newStatus) {
+        Document filter = new Document("senderId", senderId)
+                .append("receiverId", receiverId);
+        Document update = new Document("$set", new Document("status", newStatus.toString()));
+        collection.updateOne(filter, update);
     }
 }
