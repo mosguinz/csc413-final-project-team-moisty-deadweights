@@ -26,16 +26,16 @@ export default function HomePage() {
     const [ammount, setAmmount] = React.useState('');
     const [transactions, setTransactions] = React.useState([]);
 
-    function updateAmmount(event){
+    function updateAmmount(event) {
         const numberValue = Number(event.target.value);
         console.log(numberValue)
-        if(isNaN(numberValue)){
+        if (isNaN(numberValue)) {
             return;
         }
         setAmmount(event.target.value);
     }
 
-    function deposit(){
+    function deposit() {
         const transactionDto = {
             amount: Number(ammount)
         };
@@ -56,7 +56,7 @@ export default function HomePage() {
             }) // it did not work
     }
 
-    async function withdraw(){
+    async function withdraw() {
         const transactionDto = {
             amount: Number(ammount)
         };
@@ -79,7 +79,7 @@ export default function HomePage() {
         fetchTransaction();
     }, []);
 
-    function fetchTransaction(){
+    function fetchTransaction() {
         fetch('/getTransactions')
             .then((res) => res.json())
             .then((apiRes) => {
@@ -95,7 +95,7 @@ export default function HomePage() {
     return (
         <div>
             <h1>Home Page</h1>
-            $<input value={ammount} onChange={updateAmmount}/>
+            $<input value={ammount} onChange={updateAmmount} />
             <button onClick={deposit}>Deposit</button>
             <button onClick={withdraw}>Withdraw</button>
 
