@@ -25,7 +25,7 @@ export default function RequestsPage() {
 
     const [requests, setRequests] = React.useState([]);
 
-    async function Accept(){
+    async function Accept() {
         const transferRequestDto = {
             status: "Accepted"
         };
@@ -38,7 +38,7 @@ export default function RequestsPage() {
         console.log(result);
     }
 
-    async function Decline(){
+    async function Decline() {
         const transferRequestDto = {
             status: "Rejected"
         };
@@ -59,7 +59,7 @@ export default function RequestsPage() {
         fetchRequests();
     }, []);
 
-    function fetchRequests(){
+    function fetchRequests() {
         fetch('/getRequests')
             .then((res) => res.json())
             .then((apiRes) => {
@@ -75,6 +75,21 @@ export default function RequestsPage() {
     return (
         <div>
             <h1>Request Page</h1>
+
+            {/* TODO: Wrap each card in loop to display transactions. */}
+            <div class="row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Firstname Lastname requests</h5>
+                            <p class="fs-1 card-text">$50</p>
+                            <a href="#" class="btn btn-outline-primary">Decline</a>
+                            <a href="#" class="btn btn-primary">Pay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* End of bootstrap components */}
 
             <table>
                 <thead>

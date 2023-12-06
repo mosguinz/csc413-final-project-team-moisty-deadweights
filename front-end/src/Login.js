@@ -62,10 +62,10 @@ export default function Login() {
             //.then((res) => res.json()) // it worked, parse result
             .then((apiRes) => {
                 console.log(apiRes);
-                if(apiRes.ok){
+                if (apiRes.ok) {
                     console.log('Login worked');
                     setShouldRedirect(true);
-                }else{
+                } else {
                     setMessage('Failed to log in');
                 }
                 console.log('Worked'); // RestApiAppResponse
@@ -78,7 +78,7 @@ export default function Login() {
     }
 
     // redirect
-    if(shouldRedirect){
+    if (shouldRedirect) {
         return <Navigate to="/home" replace={true} />;
     }
 
@@ -86,15 +86,22 @@ export default function Login() {
         <div>
             <h1>Login Page</h1>
             {message}
-            <div>
-                <input value={userName} onChange={updateUserName} />
-
-                <input type="password" value={password} onChange={updatePassword} />
-            </div>
-            <div>
-                <button onClick={register}>Register</button>
-                <button onClick={logIn}>Login</button>
-            </div>
+            <form>
+                <div class="row mb-3">
+                    <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input value={userName} onChange={updateUserName} type="text" class="form-control" id="inputUsername" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
+                    </div>
+                </div>
+                <button onClick={register} type="submit" class="btn btn-primary">Register</button>
+                <button onClick={logIn} type="submit" class="btn btn-primary">Log in</button>
+            </form>
         </div>
     );
 }
