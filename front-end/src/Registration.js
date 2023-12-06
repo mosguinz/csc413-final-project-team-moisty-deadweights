@@ -1,7 +1,7 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 
-export default function Login() {
+export default function RegistrationPage() {
+
     const [userName, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [shouldRedirect, setShouldRedirect] = React.useState(false);
@@ -14,10 +14,9 @@ export default function Login() {
     function updatePassword(event) {
         setPassword(event.target.value);
     }
-
-    function logIn() {
+    function register() {
         setMessage('');
-        console.log('Loging in ' + userName + ' ' + password);
+        console.log('Registering ' + userName + ' ' + password);
         // send request to back end
         const userDto = {
             userName: userName,
@@ -28,33 +27,26 @@ export default function Login() {
             method: 'POST',
             body: JSON.stringify(userDto)
         };
-        fetch('/login', options) // network call = lag
-            //.then((res) => res.json()) // it worked, parse result
+        fetch('/createUser', options) // network call = lag
+            .then((res) => res.json()) // it worked, parse result
             .then((apiRes) => {
-                console.log(apiRes);
-                if (apiRes.ok) {
-                    console.log('Login worked');
-                    setShouldRedirect(true);
+                console.log(apiRes); // RestApiAppResponse
+                if (apiRes.status) { // at the app layer, tell if worked or not
+                    setUserName('');
+                    setPassword('');
+                    setMessage('Your account has been created!');
                 } else {
-                    setMessage('Failed to log in');
+                    setMessage(apiRes.message); // tell end user why?
                 }
-                console.log('Worked'); // RestApiAppResponse
-
             })
             .catch((error) => {
                 console.log(error);
-                setMessage('Failed to log in');
             }) // it did not work
-    }
-
-    // redirect
-    if (shouldRedirect) {
-        return <Navigate to="/home" replace={true} />;
     }
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Registration</h1>
             {message}
             <form>
                 <div class="row mb-3">
@@ -69,7 +61,13 @@ export default function Login() {
                         <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
                     </div>
                 </div>
-                <button onClick={logIn} type="submit" class="btn btn-primary">Log in</button>
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Confirm password</label>
+                    <div class="col-sm-10">
+                        <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
+                    </div>
+                </div>
+                <button onClick={register} type="submit" class="btn btn-primary">Register</button>
             </form>
         </div>
     );
