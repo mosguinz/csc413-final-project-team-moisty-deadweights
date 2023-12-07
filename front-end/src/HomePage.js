@@ -1,5 +1,5 @@
 import React from 'react';
-import { TransactionDto } from './dto';
+import { TransactionDto, UserDto } from './dto';
 
 // don't copy this
 // without react
@@ -26,10 +26,11 @@ export default function HomePage() {
 
     const [amount, setAmount] = React.useState('');
     const [transactions, setTransactions] = React.useState([]);
+    const [userName, setUserName] = React.useState('');
+    const [balance, setbalance] = React.useState('');
 
     function updateAmount(event) {
         const numberValue = Number(event.target.value);
-        console.log(numberValue)
         if (isNaN(numberValue)) {
             return;
         }
@@ -46,11 +47,11 @@ export default function HomePage() {
             credentials: 'include',
         };
         fetch('/createDeposit', options)
-            // .then((res) => res.json())
-            .then((apiRes) => {
-                console.log(apiRes);
+            .then((res) => res.json())
+            .then(() => {
                 setAmount('');
                 fetchTransaction();
+                updateUser();
             })
             .catch((error) => {
                 console.log(error);
@@ -68,10 +69,10 @@ export default function HomePage() {
         };
         fetch('/withdraw', options)
             .then((res) => res.json())
-            .then((apiRes) => {
-                console.log(apiRes);
+            .then(() => {
                 setAmount('');
                 fetchTransaction();
+                updateUser();
             })
             .catch((error) => {
                 setAmount('');
@@ -85,13 +86,35 @@ export default function HomePage() {
         // fetching data
         // https://developer.mozilla.org/en-US/docs/Web/API/fetch
         fetchTransaction();
+        updateUser();
     }, []);
+
+        /*
+         * Get the user by using thier cookie
+         *
+         */
+    function updateUser() {
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+        };
+        fetch('/getUser', options)
+            .then((res) => res.json())
+            .then((apiRes) => {
+                setUserName(apiRes.data[0].userName);
+                setbalance(apiRes.data[0].balance);
+            })
+            .catch((error) => {
+                setAmount('');
+                console.log(error);
+            }) // it did not work
+
+    }
 
     function fetchTransaction() {
         fetch('/getTransactions')
             .then((res) => res.json())
             .then((apiRes) => {
-                console.log(apiRes);
                 // will see transactions here as they come
                 setTransactions(apiRes.data);
             })
@@ -128,7 +151,7 @@ export default function HomePage() {
                 amountPrefix = "-";
                 break;
             case "Withdraw":
-                txMessage = <h5 className="card-title"><b>You withdrew</b> some fucking dollars</h5>;
+                txMessage = <h5 className="card-title"><b>You withdrew</b> some money</h5>;
                 amountPrefix = "-";
                 break;
             default:
@@ -156,12 +179,12 @@ export default function HomePage() {
             <h1>Home Page</h1>
 
             <div class="card">
-                <p class="card-header">Welcome back, <b>username</b></p>
+                <p class="card-header">Welcome back, <b>{userName}</b></p>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
                             <p className="card-title">Wallet balance</p>
-                            <b class="fs-1">$500.23</b>
+                            <b class="fs-1">${balance}</b>
                         </div>
                         <div class="col-md-4 d-grid text-center">
                             <button type="button" class="btn btn-primary" onClick={search}>Pay or Request</button>
