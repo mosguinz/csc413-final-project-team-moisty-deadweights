@@ -14,7 +14,7 @@ public class HandlerFactory {
             case "/friendsList" -> new FriendsListHandler();
             case "/login" -> new LoginHandler();
             case "/withdraw" -> new WithdrawHandler();
-            case "/request" -> new CreateRequestHandler();
+            case "/requestFunds" -> new CreateRequestHandler();
             case "/resolveRequest" -> new ResolveRequestsHandler();
             case "/search" -> new SearchUserHandler();
             case "/transfer" -> new TransferHandler();

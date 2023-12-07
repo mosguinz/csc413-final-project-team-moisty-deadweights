@@ -13,6 +13,7 @@ import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static handler.GsonTool.gson;
@@ -26,28 +27,32 @@ public class CreateRequestHandler implements BaseHandler {
 
         var authLookup = AuthFilter.doFilter(request);
         if (!authLookup.isLoggedIn) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.UNAUTHORIZED);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not logged in");
+            return new HttpResponseBuilder().setStatus(StatusCodes.UNAUTHORIZED).setBody(res);
         }
 
         var userDao = UserDao.getInstance();
         var senderQuery = userDao.query(new Document("userName", authLookup.userName));
         if (senderQuery.size() != 1) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not found");
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
         var recipientQuery = userDao.query(new Document("userName", requestDto.getToUserName()));
         if (recipientQuery.size() != 1) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "recipient not found");
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
         UserDto sender = senderQuery.get(0), recipient = recipientQuery.get(0);
 
         requestDto.setFromId( sender.getUniqueId() );
         requestDto.setFromUserName( sender.getUserName() );
-        requestDto.setToId( recipient.getUniqueId() );
+        requestDto.setToId(recipient.getUniqueId());
 
         requestDto.setStatus( RequestStatus.Sent );
         var requestDao = TransferRequestDao.getInstance();
+        TransferRequestDao.getInstance();
         requestDao.put(requestDto);
 
         var resp = new RestApiAppResponse<>(true, List.of(sender, recipient), null);

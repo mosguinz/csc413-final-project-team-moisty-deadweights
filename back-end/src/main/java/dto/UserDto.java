@@ -53,6 +53,7 @@ public class UserDto extends BaseDto {
         return new Document()
                 .append("userName", this.userName)
                 .append("password", this.password)
-                .append("balance", this.balance);
+                .append("balance", this.balance)
+                .append("_id", this.uniqueId);
     }
 }
