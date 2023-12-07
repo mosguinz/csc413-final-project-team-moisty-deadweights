@@ -1,4 +1,5 @@
 import React from 'react';
+import { TransactionDto } from './dto';
 
 // don't copy this
 // without react
@@ -167,6 +168,10 @@ export default function HomePage() {
             $<input value={ammount} onChange={updateAmmount} />
             <button onClick={deposit}>Deposit</button>
             <button onClick={withdraw}>Withdraw</button>
+
+            <div id="tx-feed" class="row px-4 gy-2">
+                {transactions.map(tx => makeTxCard(tx))}
+            </div>
 
             <table>
                 <thead>
