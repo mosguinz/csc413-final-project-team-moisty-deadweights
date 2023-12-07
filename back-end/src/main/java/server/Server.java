@@ -15,7 +15,7 @@ import request.ParsedRequest;
 import response.CustomHttpResponse;
 import response.HttpResponseBuilder;
 
-public class Server {
+  public class Server {
 
   public static void main(String[] args) {
     Calendar.getInstance();

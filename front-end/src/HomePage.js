@@ -99,6 +99,10 @@ export default function HomePage() {
             }) // it did not work
     }
 
+    function search() {
+        window.location.href='/search';
+    }
+
     /**
      * Make the card for listing transactions.
      * @param {TransactionDto} txDto
@@ -159,7 +163,7 @@ export default function HomePage() {
                             <b class="fs-1">$500.23</b>
                         </div>
                         <div class="col-md-4 d-grid text-center">
-                            <button type="button" class="btn btn-primary">Pay or Request</button>
+                            <button type="button" class="btn btn-primary" onClick={search}>Pay or Request</button>
                         </div>
                     </div>
                 </div>
