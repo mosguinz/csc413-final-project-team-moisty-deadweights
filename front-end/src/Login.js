@@ -29,7 +29,7 @@ export default function Login() {
             body: JSON.stringify(userDto)
         };
         fetch('/login', options) // network call = lag
-            //.then((res) => res.json()) // it worked, parse result
+            //.then((res) => {res.json()}) // it worked, parse result
             .then((apiRes) => {
                 console.log(apiRes);
                 if (apiRes.ok) {
@@ -58,19 +58,19 @@ export default function Login() {
             <p>Don't have an account yet? <a href='/registration'>Create an account</a>.</p>
             {message}
             <form>
-                <div class="row mb-3">
-                    <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
-                    <div class="col-sm-10">
-                        <input value={userName} onChange={updateUserName} type="text" class="form-control" id="inputUsername" />
+                <div className="row mb-3">
+                    <label htmlFor="inputUsername" className="col-sm-2 col-form-label">Username</label>
+                    <div className="col-sm-10">
+                        <input value={userName} onChange={updateUserName} type="text" className="form-control" id="inputUsername" />
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
+                <div className="row mb-3">
+                    <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Password</label>
+                    <div className="col-sm-10">
+                        <input value={password} onChange={updatePassword} type="password" className="form-control" id="inputPassword" />
                     </div>
                 </div>
-                <button onClick={logIn} type="submit" class="btn btn-primary">Log in</button>
+                <button onClick={logIn} type="button" className="btn btn-primary">Log in</button>
             </form>
         </div>
     );

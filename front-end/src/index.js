@@ -13,7 +13,7 @@ import './index.css';
 const root = ReactDOM.createRoot(document.getElementById('react-part-only'));
 root.render(
     <React.StrictMode>
-        <div class="container">
+        <div className="container">
             <App />
         </div>
     </React.StrictMode>
