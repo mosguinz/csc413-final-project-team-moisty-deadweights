@@ -50,10 +50,12 @@ public class UserDto extends BaseDto {
     }
 
     public Document toDocument() {
-        return new Document()
-                .append("userName", this.userName)
+        Document doc = new Document().append("userName", this.userName)
                 .append("password", this.password)
-                .append("balance", this.balance)
-                .append("_id", this.uniqueId);
+                .append("balance", this.balance);
+        //if( this.uniqueId != null ) {
+        //    doc.append("_id", this.uniqueId);
+        //}
+        return doc;
     }
 }

@@ -67,6 +67,7 @@ export default function HomePage() {
             credentials: 'include',
         };
         fetch('/withdraw', options)
+            .then((res) => res.json())
             .then((apiRes) => {
                 console.log(apiRes);
                 setAmount('');
