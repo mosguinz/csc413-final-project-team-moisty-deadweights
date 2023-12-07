@@ -1,4 +1,5 @@
 import React from 'react';
+import { TransactionDto } from './dto';
 
 // don't copy this
 // without react
@@ -98,6 +99,53 @@ export default function HomePage() {
             }) // it did not work
     }
 
+    /**
+     * Make the card for listing transactions.
+     * @param {TransactionDto} txDto
+     * @param {} currentUserDto
+     */
+    function makeTxCard(txDto, currentUserDto) {
+        let txMessage;
+        let amountPrefix;
+
+        switch (txDto.transactionType) {
+            case "Deposit":
+                txMessage = <h5 className="card-title"><b>You deposited</b> mucho dineros</h5>;
+                amountPrefix = "+";
+                break;
+            case "Transfer":
+                if (currentUserDto.username === txDto.userId) {
+                    txMessage = <h5 className="card-title"><b>${txDto.userId}</b> paid <b>you</b></h5>;
+                    amountPrefix = "+";
+                    break;
+                }
+                txMessage = <h5 className="card-title"><b>You</b> paid <b>anotherguy</b></h5>;
+                amountPrefix = "-";
+                break;
+            case "Withdraw":
+                txMessage = <h5 className="card-title"><b>You withdrew</b> some fucking dollars</h5>;
+                amountPrefix = "-";
+                break;
+            default:
+                // TODO: Deal with this shit
+                txMessage = "";
+                amountPrefix = "";
+        }
+
+        return (<div class="card">
+            <div class="card-body row">
+                <div class="col-md-8">
+                    {txMessage}
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{new Date(txDto.timestamp).toString()}</h6>
+                    <p>{txDto.transactionType}</p>
+                </div>
+                <div class="col-md-4 d-grid text-center">
+                    <p class="fs-1">{amountPrefix}${txDto.amount}</p>
+                </div>
+            </div>
+        </div>)
+    }
+
     return (
         <div>
             <h1>Home Page</h1>
@@ -124,38 +172,11 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Type
-                        </th>
-                        <th>
-                            Amount
-                        </th>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            From user
-                        </th>
-                        <th>
-                            To user
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map(transaction => (
-                        <tr>
-                            <td>{transaction.transactionType}</td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.uniqueId}</td>
-                            <td>{transaction.userId}</td>
-                            <td>{transaction.toId}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+            <div id="tx-feed" class="row px-4 gy-2">
+                {transactions.map(tx => makeTxCard(tx))}
+            </div>
+
         </div>
     );
 }
