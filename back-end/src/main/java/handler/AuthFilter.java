@@ -9,6 +9,7 @@ public class AuthFilter {
   public static class AuthResult {
     public boolean isLoggedIn;
     public String userName;
+    public String userId;
   }
 
   public static AuthResult doFilter(ParsedRequest parsedRequest){
@@ -26,6 +27,7 @@ public class AuthFilter {
     }
     result.isLoggedIn = true;
     result.userName = authRes.get(0).getUserName();
+    result.userId = authRes.get(0).getUserId();
     return result;
   }
 }

@@ -41,6 +41,7 @@ public class LoginHandler implements BaseHandler {
         authDto.setExpireTime(expireTime);
         authDto.setHash(hash);
         authDto.setUserName(userDto.getUserName());
+        authDto.setUserId(userDto.getUniqueId());
         authDao.put(authDto);
 
         return new HttpResponseBuilder().setStatus(StatusCodes.OK)
