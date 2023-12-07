@@ -7,6 +7,7 @@ import LandingPage from './Landing';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchUsers from './Search';
+import Transfer from './transfer';
 
 // https://reactrouter.com/en/main/start/examples
 function App() {
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/registration" element={<RegistrationPage />} />
                     <Route path="/search" element={<SearchUsers/>} />
+                    <Route path="/transfer" element={<Transfer/>} />
                 </Routes>
             </div>
         </BrowserRouter>

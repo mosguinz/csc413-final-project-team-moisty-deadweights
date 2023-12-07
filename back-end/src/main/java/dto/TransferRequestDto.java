@@ -73,8 +73,9 @@ public class TransferRequestDto extends BaseDto {
                 .append("fromUserName", this.fromUserName)
                 .append("fromId", this.fromId)
                 .append("toUserName", this.toUserName)
-                .append("toId", this.toUserName)
-                .append("status", this.status);
+                .append("toId", this.toId)
+                .append("status", this.status.toString())
+                .append("_id", this.uniqueId);
     }
 
     public static TransferRequestDto fromDocument(Document match) {
@@ -90,6 +91,7 @@ public class TransferRequestDto extends BaseDto {
             case "Rejected" -> RequestStatus.Rejected;
             default -> RequestStatus.Sent;
         };
+        transferRequestDto.loadUniqueId(match);
         return transferRequestDto;
     }
 }

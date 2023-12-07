@@ -10,6 +10,7 @@ import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static handler.GsonTool.gson;
@@ -27,19 +28,22 @@ public class TransferHandler implements BaseHandler {
         var userDao = UserDao.getInstance();
         var senderQuery = userDao.query(new Document("userName", authLookup.userName));
         if (senderQuery.size() != 1) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not found");
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
         var txDto = gson.fromJson(request.getBody(), TransactionDto.class);
         var recipientQuery = userDao.query(new Document("userName", txDto.getToId()));
         if (recipientQuery.size() != 1) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "recipient not found");
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
         // TODO: Why the fuck is the sender DTO not correct??
         UserDto sender = senderQuery.get(0), recipient = recipientQuery.get(0);
         if (sender.getBalance() < txDto.getAmount()) {
-            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
+            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "Not enough balance");
+            return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
         sender.setBalance(sender.getBalance() - txDto.getAmount());
