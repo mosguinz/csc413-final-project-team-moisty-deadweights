@@ -16,6 +16,7 @@ public class AuthFilter {
     AuthDao authDao = AuthDao.getInstance();
     var result = new AuthResult();
     String hash = parsedRequest.getCookieValue("auth");
+    System.out.println("hash: " + hash);
     if(hash == null){
       return result;
     }

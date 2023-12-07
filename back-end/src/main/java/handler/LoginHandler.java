@@ -34,6 +34,8 @@ public class LoginHandler implements BaseHandler {
             return new HttpResponseBuilder().setStatus(StatusCodes.UNAUTHORIZED);
         }
 
+        userDto = userLookup.get(0);
+
         var authDto = new AuthDto();
         var authDao = AuthDao.getInstance();
         var expireTime = Instant.now().getEpochSecond() + 6000; // 10 minutes
@@ -41,7 +43,10 @@ public class LoginHandler implements BaseHandler {
         authDto.setExpireTime(expireTime);
         authDto.setHash(hash);
         authDto.setUserName(userDto.getUserName());
-        authDto.setUserId(userDto.getUniqueId());
+        // authDto.setUserId(userDto.getUniqueId());
+        System.out.println("started printint out document for auth");
+        System.out.println(authDto.toDocument());
+        System.out.println("finished printint out document for auth");
         authDao.put(authDto);
 
         return new HttpResponseBuilder().setStatus(StatusCodes.OK)

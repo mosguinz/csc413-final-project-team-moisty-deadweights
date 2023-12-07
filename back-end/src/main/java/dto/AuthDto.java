@@ -14,6 +14,7 @@ public class AuthDto extends BaseDto {
         auth.expireTime = document.getLong("expireTime");
         auth.userName = document.getString("userName");
         auth.hash = document.getString("hash");
+        auth.userId = document.getString("userId");
         return auth;
     }
 
