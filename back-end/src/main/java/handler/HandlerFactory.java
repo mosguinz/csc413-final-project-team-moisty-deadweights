@@ -10,6 +10,8 @@ public class HandlerFactory {
             case "/createDeposit" -> new CreateDepositHandler();
             case "/getTransactions" -> new GetTransactionsHandler();
             case "/getRequests" -> new GetRequestsHandler();
+            case "/friendRequest" -> new FriendRequestHandler();
+            case "/friendsList" -> new FriendsListHandler();
             case "/login" -> new LoginHandler();
             case "/withdraw" -> new WithdrawHandler();
             case "/request" -> new CreateRequestHandler();
