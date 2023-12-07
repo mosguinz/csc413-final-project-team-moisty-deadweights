@@ -18,6 +18,7 @@ public class HandlerFactory {
             case "/resolveRequest" -> new ResolveRequestsHandler();
             case "/search" -> new SearchUserHandler();
             case "/transfer" -> new TransferHandler();
+            case "/getUser" -> new GetUserHandler();
             default -> new FallbackHandler();
         };
     }
