@@ -11,7 +11,6 @@ public class CustomParser {
         request = request.trim();
 
         String[] req = request.split("(\\r?\\n){2}", 2);
-        System.out.println(req.length);
         String body = req.length == 1 ? null : req[1];
 
         String[] startLine = req[0].split(" ");
@@ -32,7 +31,6 @@ public class CustomParser {
         String[] headers = req[0].split("\\r?\\n");
         for (int i = 1; i < headers.length; i++) { // skip start-line
             String line = headers[i].trim();
-            System.out.println(i + " " + line);
 
             String[] headerKeyValue = line.split(": *", 2);
             String key = headerKeyValue[0];
@@ -54,7 +52,6 @@ public class CustomParser {
         parsedRequest.setPath(path);
         parsedRequest.setBody(body);
 
-        System.out.println(body);
         return parsedRequest;
     }
 }

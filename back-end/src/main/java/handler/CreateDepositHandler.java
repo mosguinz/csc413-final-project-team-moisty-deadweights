@@ -28,12 +28,12 @@ public class CreateDepositHandler implements BaseHandler {
         var userDao = UserDao.getInstance();
         var userLookup = userDao.query(new Document("userName", authRes.userName));
         if (userLookup.size() != 1) {
+            System.out.println("size of lookup was " + userLookup.size());
             return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
         }
 
         var userDto = userLookup.get(0);
         txDto.setTransactionType(TransactionType.Deposit);
-        txDto.setUserId(authRes.userName);
         txDao.put(txDto);
 
         userDto.setBalance(userDto.getBalance() + txDto.getAmount());

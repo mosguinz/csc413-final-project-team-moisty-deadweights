@@ -18,7 +18,6 @@ public class WithdrawHandler implements BaseHandler {
 
     @Override
     public HttpResponseBuilder handleRequest(ParsedRequest request) {
-        System.out.println(request.getBody());
 
         var authLookup = AuthFilter.doFilter(request);
         if (!authLookup.isLoggedIn) {
@@ -33,7 +32,7 @@ public class WithdrawHandler implements BaseHandler {
 
         var txDto = gson.fromJson(request.getBody(), TransactionDto.class);
         UserDto userDto = userQuery.get(0);
-        if (userDto.getBalance() < txDto.getAmount()) {
+        if (userDto.getBalance() < txDto.getAmount() || txDto.getAmount() < 0.001) {
             return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST);
         }
 
@@ -41,7 +40,6 @@ public class WithdrawHandler implements BaseHandler {
         userDto.setBalance(userDto.getBalance() - txDto.getAmount());
         userDao.put(userDto);
         txDto.setTransactionType(TransactionType.Withdraw);
-        txDto.setUserId(userDto.getUserName());
         txDao.put(txDto);
 
         var resp = new RestApiAppResponse<>(true, List.of(txDto), null);

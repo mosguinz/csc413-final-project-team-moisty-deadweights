@@ -18,7 +18,6 @@ public class TransferHandler implements BaseHandler {
 
     @Override
     public HttpResponseBuilder handleRequest(ParsedRequest request) {
-        System.out.println(request.getBody());
 
         var authLookup = AuthFilter.doFilter(request);
         if (!authLookup.isLoggedIn) {

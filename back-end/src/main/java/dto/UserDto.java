@@ -21,6 +21,7 @@ public class UserDto extends BaseDto {
         userDto.userName = match.getString("userName");
         userDto.password = match.getString("password");
         userDto.balance = match.getDouble("balance");
+        userDto.loadUniqueId(match);
         return userDto;
     }
 
