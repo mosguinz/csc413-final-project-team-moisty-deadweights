@@ -1,5 +1,7 @@
 package request;
 
+import java.util.Arrays;
+
 public class CustomParser {
 
     // extract java useable values from a raw http request string
@@ -8,7 +10,8 @@ public class CustomParser {
         var parsedRequest = new ParsedRequest();
         request = request.trim();
 
-        String[] req = request.split("\n\n", 2);
+        String[] req = request.split("(\\r?\\n){2}", 2);
+        System.out.println(req.length);
         String body = req.length == 1 ? null : req[1];
 
         String[] startLine = req[0].split(" ");
@@ -26,9 +29,10 @@ public class CustomParser {
             }
         }
 
-        String[] headers = req[0].split("\n");
+        String[] headers = req[0].split("\\r?\\n");
         for (int i = 1; i < headers.length; i++) { // skip start-line
-            String line = headers[i];
+            String line = headers[i].trim();
+            System.out.println(i + " " + line);
 
             String[] headerKeyValue = line.split(": *", 2);
             String key = headerKeyValue[0];
@@ -38,7 +42,7 @@ public class CustomParser {
             if (!key.equalsIgnoreCase("cookie")) {
                 continue;
             }
-            
+
             String[] cookies = value.split(";");
             for (String cookie : cookies) {
                 String[] cookieKeyValue = cookie.split("=", 2);
@@ -50,6 +54,7 @@ public class CustomParser {
         parsedRequest.setPath(path);
         parsedRequest.setBody(body);
 
+        System.out.println(body);
         return parsedRequest;
     }
 }
