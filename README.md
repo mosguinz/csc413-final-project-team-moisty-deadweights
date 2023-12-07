@@ -5,3 +5,10 @@ Add your names here
 * Arjun Singh Gill
 * Mos Kullathon
 * Niko Galedo
+
+
+## Database
+
+* DB name: `FinalProject`
+* Mongo client hosted at `localhost:27017`
+* To run Mongo server: `./bin/mongod --dbpath ./db`
