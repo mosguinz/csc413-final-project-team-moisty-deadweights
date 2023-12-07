@@ -50,25 +50,25 @@ export default function RegistrationPage() {
             <p>Already have an account? <a href='/login'>Log in instead</a>.</p>
             {message}
             <form>
-                <div class="row mb-3">
-                    <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
-                    <div class="col-sm-10">
-                        <input value={userName} onChange={updateUserName} type="text" class="form-control" id="inputUsername" />
+                <div className="row mb-3">
+                    <label htmlFor="inputUsername" className="col-sm-2 col-form-label">Username</label>
+                    <div className="col-sm-10">
+                        <input value={userName} onChange={updateUserName} type="text" className="form-control" id="inputUsername" />
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
+                <div className="row mb-3">
+                    <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Password</label>
+                    <div className="col-sm-10">
+                        <input value={password} onChange={updatePassword} type="password" className="form-control" id="inputPassword" />
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Confirm password</label>
-                    <div class="col-sm-10">
-                        <input value={password} onChange={updatePassword} type="password" class="form-control" id="inputPassword" />
+                <div className="row mb-3">
+                    <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Confirm password</label>
+                    <div className="col-sm-10">
+                        <input value={password} onChange={updatePassword} type="password" className="form-control" id="inputPassword" />
                     </div>
                 </div>
-                <button onClick={register} type="submit" class="btn btn-primary">Register</button>
+                <button onClick={register} type="button" className="btn btn-primary">Register</button>
             </form>
         </div>
     );
