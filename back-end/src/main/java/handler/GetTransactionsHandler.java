@@ -21,10 +21,10 @@ public class GetTransactionsHandler implements BaseHandler {
 
         // all tx involving this user
         Document filter = new Document("$or", List.of(
-                new Document("userId", authLookup.userName),
-                new Document("toId", authLookup.userName)
+                new Document("userId", authLookup.userId),
+                new Document("toId", authLookup.userId)
         ));
-        
+
         try {
             var resp = new RestApiAppResponse<>(true, txDao.query(filter), null);
             return new HttpResponseBuilder().setStatus(StatusCodes.OK).setBody(resp);

@@ -4,6 +4,7 @@ import org.bson.Document;
 
 public class AuthDto extends BaseDto {
 
+    private String userId;
     private String userName;
     private Long expireTime;
     private String hash;
@@ -13,6 +14,7 @@ public class AuthDto extends BaseDto {
         auth.expireTime = document.getLong("expireTime");
         auth.userName = document.getString("userName");
         auth.hash = document.getString("hash");
+        auth.userId = document.getString("userId");
         return auth;
     }
 
@@ -40,11 +42,20 @@ public class AuthDto extends BaseDto {
         this.hash = hash;
     }
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
     @Override
     public Document toDocument() {
         return new Document()
                 .append("userName", this.userName)
                 .append("expireTime", this.expireTime)
-                .append("hash", this.hash);
+                .append("hash", this.hash)
+                .append("userId", this.userId);
     }
 }

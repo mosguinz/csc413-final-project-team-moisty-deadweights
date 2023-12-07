@@ -24,21 +24,21 @@ import { TransactionDto } from './dto';
 
 export default function HomePage() {
 
-    const [ammount, setAmmount] = React.useState('');
+    const [amount, setAmount] = React.useState('');
     const [transactions, setTransactions] = React.useState([]);
 
-    function updateAmmount(event) {
+    function updateAmount(event) {
         const numberValue = Number(event.target.value);
         console.log(numberValue)
         if (isNaN(numberValue)) {
             return;
         }
-        setAmmount(event.target.value);
+        setAmount(event.target.value);
     }
 
     function deposit() {
         const transactionDto = {
-            amount: Number(ammount)
+            amount: Number(amount)
         };
         const options = {
             method: 'POST',
@@ -46,10 +46,10 @@ export default function HomePage() {
             credentials: 'include',
         };
         fetch('/createDeposit', options)
-            .then((res) => res.json())
+            // .then((res) => res.json())
             .then((apiRes) => {
                 console.log(apiRes);
-                setAmmount('');
+                setAmount('');
                 fetchTransaction();
             })
             .catch((error) => {
@@ -59,17 +59,23 @@ export default function HomePage() {
 
     async function withdraw() {
         const transactionDto = {
-            amount: Number(ammount)
+            amount: Number(amount)
         };
         const options = {
             method: 'POST',
             body: JSON.stringify(transactionDto),
             credentials: 'include',
         };
-        const result = await fetch('/withdraw', options);
-        const apiRes = await result.json();
-        setAmmount('');
-        fetchTransaction();
+        fetch('/withdraw', options)
+            .then((apiRes) => {
+                console.log(apiRes);
+                setAmount('');
+                fetchTransaction();
+            })
+            .catch((error) => {
+                setAmount('');
+                console.log(error);
+            }) // it did not work
     }
 
     React.useEffect(() => {
@@ -158,9 +164,9 @@ export default function HomePage() {
                 <div class="card-footer">
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input id="amount" type="number" class="form-control"></input>
-                        <button type="button" class="btn btn-outline-primary">Deposit</button>
-                        <button type="button" class="btn btn-outline-primary">Withdraw</button>
+                        <input id="amount" type="number" class="form-control" onChange={updateAmount}></input>
+                        <button type="button" class="btn btn-outline-primary" onClick={deposit}>Deposit</button>
+                        <button type="button" class="btn btn-outline-primary" onClick={withdraw}>Withdraw</button>
                     </div>
                 </div>
             </div>
