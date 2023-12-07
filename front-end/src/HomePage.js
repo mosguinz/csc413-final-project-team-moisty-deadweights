@@ -95,6 +95,30 @@ export default function HomePage() {
     return (
         <div>
             <h1>Home Page</h1>
+
+            <div class="card">
+                <p class="card-header">Welcome back, <b>username</b></p>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p className="card-title">Wallet balance</p>
+                            <b class="fs-1">$500.23</b>
+                        </div>
+                        <div class="col-md-4 d-grid text-center">
+                            <button type="button" class="btn btn-primary">Pay or Request</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input id="amount" type="number" class="form-control"></input>
+                        <button type="button" class="btn btn-outline-primary">Deposit</button>
+                        <button type="button" class="btn btn-outline-primary">Withdraw</button>
+                    </div>
+                </div>
+            </div>
+
             $<input value={ammount} onChange={updateAmmount} />
             <button onClick={deposit}>Deposit</button>
             <button onClick={withdraw}>Withdraw</button>
