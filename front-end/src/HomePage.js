@@ -110,7 +110,7 @@ export default function HomePage() {
 
         switch (txDto.transactionType) {
             case "Deposit":
-                txMessage = <h5 className="card-title"><b>You deposited</b> some fucking dollars</h5>;
+                txMessage = <h5 className="card-title"><b>You deposited</b> mucho dineros</h5>;
                 amountPrefix = "+";
                 break;
             case "Transfer":
@@ -127,6 +127,7 @@ export default function HomePage() {
                 amountPrefix = "-";
                 break;
             default:
+                // TODO: Deal with this shit
                 txMessage = "";
                 amountPrefix = "";
         }
@@ -134,11 +135,12 @@ export default function HomePage() {
         return (<div class="card">
             <div class="card-body row">
                 <div class="col-md-8">
-                    <h5 className="card-title"><b>You</b> paid <b>anotherguy</b></h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Oct 25</h6>
+                    {txMessage}
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{new Date(txDto.timestamp).toString()}</h6>
+                    <p>{txDto.transactionType}</p>
                 </div>
                 <div class="col-md-4 d-grid text-center">
-                    <p class="fs-1">${amountPrefix}$${txDto.amount}</p>
+                    <p class="fs-1">{amountPrefix}${txDto.amount}</p>
                 </div>
             </div>
         </div>)
@@ -171,46 +173,10 @@ export default function HomePage() {
                 </div>
             </div>
 
-            $<input value={ammount} onChange={updateAmmount} />
-            <button onClick={deposit}>Deposit</button>
-            <button onClick={withdraw}>Withdraw</button>
-
             <div id="tx-feed" class="row px-4 gy-2">
                 {transactions.map(tx => makeTxCard(tx))}
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Type
-                        </th>
-                        <th>
-                            Amount
-                        </th>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            From user
-                        </th>
-                        <th>
-                            To user
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map(transaction => (
-                        <tr>
-                            <td>{transaction.transactionType}</td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.uniqueId}</td>
-                            <td>{transaction.userId}</td>
-                            <td>{transaction.toId}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 }
