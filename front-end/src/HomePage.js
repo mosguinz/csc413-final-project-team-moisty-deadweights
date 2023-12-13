@@ -27,6 +27,7 @@ export default function HomePage() {
     const [amount, setAmount] = React.useState('');
     const [transactions, setTransactions] = React.useState([]);
     const [userName, setUserName] = React.useState('');
+    const [userId, setUserId] = React.useState('');
     const [balance, setbalance] = React.useState('');
 
     function updateAmount(event) {
@@ -103,6 +104,7 @@ export default function HomePage() {
             .then((apiRes) => {
                 setUserName(apiRes.data[0].userName);
                 setbalance(apiRes.data[0].balance);
+                setUserId(apiRes.data[0]._id);
             })
             .catch((error) => {
                 setAmount('');
@@ -112,6 +114,7 @@ export default function HomePage() {
     }
 
     function fetchTransaction() {
+        updateUser();
         fetch('/getTransactions')
             .then((res) => res.json())
             .then((apiRes) => {
@@ -142,7 +145,7 @@ export default function HomePage() {
                 amountPrefix = "+";
                 break;
             case "Transfer":
-                if (currentUserDto.username === txDto.userId) {
+                if (txDto.toId === userId) {
                     txMessage = <h5 className="card-title"><b>${txDto.userId}</b> paid <b>you</b></h5>;
                     amountPrefix = "+";
                     break;

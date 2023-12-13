@@ -1,6 +1,7 @@
 package handler;
 
 import dao.UserDao;
+import dto.UserDto;
 
 import java.util.List;
 
@@ -25,7 +26,9 @@ public class GetUserHandler implements BaseHandler {
         Document filter = new Document("userName", authLookup.userName);
 
         try {
-            var resp = new RestApiAppResponse<>(true, usrDao.query(filter), null);
+            UserDto usrDto = usrDao.query(filter).get(0);
+            usrDto.loadUniqueId(usrDto.getObjectId());
+            var resp = new RestApiAppResponse<>(true, List.of(usrDto), null);
             System.out.println("printing out response for get user");
             System.out.println(resp.toString());
             return new HttpResponseBuilder().setStatus(StatusCodes.OK).setBody(resp);
