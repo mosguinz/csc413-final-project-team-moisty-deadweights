@@ -27,6 +27,7 @@ public class TransactionDto extends BaseDto {
         transaction.timestamp = document.getLong("timestamp");
         transaction.toId = document.getString("toId");
         transaction.amount = document.getDouble("amount");
+        transaction.userId = document.getString("userId");
         transaction.transactionType = TransactionType.valueOf(document.getString("transactionType"));
         return transaction;
     }
