@@ -6,6 +6,8 @@ import dto.TransactionDto;
 import dto.TransactionType;
 import dto.UserDto;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
@@ -26,7 +28,10 @@ public class TransferHandler implements BaseHandler {
         }
 
         var userDao = UserDao.getInstance();
-        var senderQuery = userDao.query(new Document("userName", authLookup.userName));
+        var senderQuery = userDao.query(new Document("_id", new ObjectId( authLookup.userId)));
+        System.out.println("PRINTING IMPORTANT INFO");
+        System.out.println(authLookup.userId);
+        System.out.println(senderQuery.size());
         if (senderQuery.size() != 1) {
             RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not found");
             return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
@@ -52,7 +57,8 @@ public class TransferHandler implements BaseHandler {
         userDao.put(recipient);
 
         var txDao = TransactionDao.getInstance();
-        txDto.setUserId(sender.getUserName());
+        txDto.setUserId(authLookup.userId);
+        txDto.setToId(recipient.getObjectId().get("_id").toString());
         txDto.setTransactionType(TransactionType.Transfer);
         txDto.setAmount(txDto.getAmount());
         txDao.put(txDto);

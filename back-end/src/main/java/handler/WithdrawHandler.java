@@ -44,6 +44,7 @@ public class WithdrawHandler implements BaseHandler {
         userDto.setBalance(userDto.getBalance() - txDto.getAmount());
         userDao.put(userDto);
         txDto.setTransactionType(TransactionType.Withdraw);
+        txDto.setUserId( authLookup.userId );
         txDao.put(txDto);
 
         var resp = new RestApiAppResponse<>(true, List.of(txDto), null);
