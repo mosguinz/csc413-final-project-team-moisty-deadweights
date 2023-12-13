@@ -43,7 +43,8 @@ public class LoginHandler implements BaseHandler {
         authDto.setExpireTime(expireTime);
         authDto.setHash(hash);
         authDto.setUserName(userDto.getUserName());
-        // authDto.setUserId(userDto.getUniqueId());
+        System.out.println("pre adding in user id");
+        authDto.setUserId(userDto.getObjectId().get("_id").toString());
         System.out.println("started printint out document for auth");
         System.out.println(authDto.toDocument());
         System.out.println("finished printint out document for auth");
