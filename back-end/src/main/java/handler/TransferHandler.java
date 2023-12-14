@@ -29,9 +29,6 @@ public class TransferHandler implements BaseHandler {
 
         var userDao = UserDao.getInstance();
         var senderQuery = userDao.query(new Document("_id", new ObjectId( authLookup.userId)));
-        System.out.println("PRINTING IMPORTANT INFO");
-        System.out.println(authLookup.userId);
-        System.out.println(senderQuery.size());
         if (senderQuery.size() != 1) {
             RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not found");
             return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);

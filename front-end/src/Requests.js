@@ -61,7 +61,7 @@ export default function RequestsPage() {
 
     function fetchRequests() {
         fetch('/getRequests')
-            .then((res) => res.json())
+            //.then((res) => res.json())
             .then((apiRes) => {
                 console.log(apiRes);
                 // will see transactions here as they come

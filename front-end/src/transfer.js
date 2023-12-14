@@ -33,7 +33,7 @@ export default function Transfer() {
             }) // it did not work
     }
 
-    function request() {
+    async function request() {
         const transferRequestDto = {
             amount: Number(amount),
             toUserName: userName
@@ -44,9 +44,9 @@ export default function Transfer() {
             credentials: 'include',
         };
         fetch('/requestFunds', options)
-            .then((res) => res.json())
-            .then((apiRes) => {
-                console.log(apiRes);
+            //.then((res) => res.json())
+            .then( async(apiRes) => {
+                console.log(await apiRes.json());
                 setAmount('');
             })
             .catch((error) => {

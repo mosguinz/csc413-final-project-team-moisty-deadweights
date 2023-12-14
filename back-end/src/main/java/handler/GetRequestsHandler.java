@@ -23,7 +23,7 @@ public class GetRequestsHandler implements BaseHandler {
 
         // all tx involving this user
         Document filter = new Document("$and", List.of(
-                new Document("userName", authLookup.userName),
+                new Document("_id", authLookup.userId),
                 new Document("Status", RequestStatus.Sent)
         ));
 
