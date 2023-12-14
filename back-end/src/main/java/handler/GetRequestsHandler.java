@@ -23,8 +23,8 @@ public class GetRequestsHandler implements BaseHandler {
 
         // all tx involving this user
         Document filter = new Document("$and", List.of(
-                new Document("userName", authLookup.userName),
-                new Document("Status", RequestStatus.Sent)
+                new Document("toId", authLookup.userId),
+                new Document("status", "Sent")
         ));
 
         try {
@@ -32,6 +32,7 @@ public class GetRequestsHandler implements BaseHandler {
             return new HttpResponseBuilder().setStatus(StatusCodes.OK).setBody(resp);
         } catch (Exception e) {
             return new HttpResponseBuilder().setStatus(StatusCodes.SERVER_ERROR);
+
         }
     }
 

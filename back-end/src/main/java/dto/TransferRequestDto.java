@@ -74,8 +74,7 @@ public class TransferRequestDto extends BaseDto {
                 .append("fromId", this.fromId)
                 .append("toUserName", this.toUserName)
                 .append("toId", this.toId)
-                .append("status", this.status.toString())
-                .append("_id", this.uniqueId);
+                .append("status", this.status.toString());
     }
 
     public static TransferRequestDto fromDocument(Document match) {

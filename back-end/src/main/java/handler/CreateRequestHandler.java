@@ -9,6 +9,8 @@ import dto.TransactionType;
 import dto.TransferRequestDto;
 import dto.UserDto;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
@@ -32,9 +34,9 @@ public class CreateRequestHandler implements BaseHandler {
         }
 
         var userDao = UserDao.getInstance();
-        var senderQuery = userDao.query(new Document("userName", authLookup.userName));
+        var senderQuery = userDao.query(new Document("_id", new ObjectId(authLookup.userId)));
         if (senderQuery.size() != 1) {
-            RestApiAppResponse res = new RestApiAppResponse<>(false, new ArrayList<>(), "sender not found");
+            RestApiAppResponse res = new RestApiAppResponse<>(false, senderQuery, "sender not found");
             return new HttpResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 
@@ -46,7 +48,7 @@ public class CreateRequestHandler implements BaseHandler {
 
         UserDto sender = senderQuery.get(0), recipient = recipientQuery.get(0);
 
-        requestDto.setFromId( sender.getUniqueId() );
+        requestDto.setFromId(authLookup.userId);
         requestDto.setFromUserName( sender.getUserName() );
         requestDto.setToId(recipient.getUniqueId());
 

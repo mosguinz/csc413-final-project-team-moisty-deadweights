@@ -25,39 +25,29 @@ export default function RequestsPage() {
 
     const [requests, setRequests] = React.useState([]);
 
-    async function Accept() {
-        const transferRequestDto = {
-            status: "Accepted"
-        };
+    async function Accept(transferRequestDto) {
+        console.log(transferRequestDto);
+        transferRequestDto["status"] = "Accepted"
         const options = {
             method: 'POST',
             body: JSON.stringify(transferRequestDto),
             credentials: 'include',
         }
         const result = await fetch('/resolveRequest', options);
-        console.log(result);
+        console.log("results", result);
     }
 
-    async function Decline() {
-        const transferRequestDto = {
-            status: "Rejected"
-        };
+    async function Decline(transferRequestDto) {
+        console.log(transferRequestDto);
+        transferRequestDto["status"] = "Rejected"
         const options = {
             method: 'POST',
             body: JSON.stringify(transferRequestDto),
             credentials: 'include',
         }
         const result = await fetch('/resolveRequest', options);
-        console.log(result);
+        console.log(await result.json());
     }
-
-    React.useEffect(() => {
-        // triggers when componenet mounds
-        // https://react.dev/reference/react/useEffect
-        // fetching data
-        // https://developer.mozilla.org/en-US/docs/Web/API/fetch
-        fetchRequests();
-    }, []);
 
     function fetchRequests() {
         fetch('/getRequests')
@@ -72,57 +62,39 @@ export default function RequestsPage() {
             }) // it did not work
     }
 
+    React.useEffect(() => {
+        // triggers when componenet mounds
+        // https://react.dev/reference/react/useEffect
+        // fetching data
+        // https://developer.mozilla.org/en-US/docs/Web/API/fetch
+        fetchRequests();
+    }, []);
+
+    function makeReqCard(reqDto) {
+        return(<div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{reqDto.fromUserName} requests</h5>
+                        <p class="fs-1 card-text">${reqDto.amount}</p>
+                        <a href="#" class="btn btn-outline-primary" onClick={Decline.bind(null, reqDto)}>Decline</a>
+                        <a href="#" class="btn btn-primary" onClick={Accept.bind(null, reqDto)}>Pay</a>
+                    </div>
+                </div>
+            </div>)
+    }
+
+
+
+
     return (
         <div>
             <h1>Request Page</h1>
 
             {/* TODO: Wrap each card in loop to display transactions. */}
-            <div class="row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Firstname Lastname requests</h5>
-                            <p class="fs-1 card-text">$50</p>
-                            <a href="#" class="btn btn-outline-primary">Decline</a>
-                            <a href="#" class="btn btn-primary">Pay</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                { requests.map( (req) => makeReqCard(req)) }
             </div>
             {/* End of bootstrap components */}
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            To user
-                        </th>
-                        <th>
-                            Amount
-                        </th>
-                        <th>
-                            Accept
-                        </th>
-                        <th>
-                            Decline
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {requests.map(transaction => (
-                        <tr>
-                            <td>{transaction.fromUserName}</td>
-                            <td>{transaction.amount}</td>
-                            <td>
-                                <button onClick={Accept}>Accept</button>
-                            </td>
-                            <td>
-                                <button onClick={Decline}>Decline</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 }
