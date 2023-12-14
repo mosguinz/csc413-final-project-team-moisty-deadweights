@@ -26,5 +26,9 @@ public abstract class BaseDao<T extends BaseDto> {
       collection.replaceOne(dto.getObjectId(), dto.toDocument());
     }
   }
+  public void remove(T dto) {
+    collection.deleteOne(dto.toDocument());
+  }
+
 
 }

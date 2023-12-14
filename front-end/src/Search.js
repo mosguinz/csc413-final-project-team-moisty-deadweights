@@ -30,20 +30,19 @@ export default function SearchUsers() {
 
     return (
         <div>
-            <input value={searchText} onChange={updateSearchText} type="text" placeholder='Search User'></input>
-            <button type='button' onClick={search}>Submit</button> 
-            <table>
-                <thead>
-                     <th>Users Found</th>
-                </thead>
-                <tbody>
-                    {searchResults.map(result => (
-                        <tr>
-                            <td>{result.userName}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h1>Search Users: </h1>
+            <div class="input-group">
+                <input value={searchText} class="form-control" onChange={updateSearchText} type="text" placeholder='Search User'></input>
+                <button type='button' class="btn btn-primary" onClick={search}>Submit</button> 
+            </div>
+            <div>
+            {/* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</button> */}
+                {searchResults.map(result => (    
+                    <div class="col-md-4 d-grid text-center" style={{margin:3}}>
+                        <button type="button" class="btn btn-outline-primary">{result.userName}</button> 
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

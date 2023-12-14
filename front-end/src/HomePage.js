@@ -1,5 +1,6 @@
 import React from 'react';
 import { TransactionDto, UserDto } from './dto';
+import { Navigate } from 'react-router-dom';
 
 // don't copy this
 // without react
@@ -30,6 +31,7 @@ export default function HomePage() {
     const [userName, setUserName] = React.useState('');
     const [userId, setUserId] = React.useState('');
     const [balance, setbalance] = React.useState('');
+    const [shouldRedirect, setShouldRedirect] = React.useState(false);
 
     function updateAmount(event) {
         const numberValue = Number(event.target.value);
@@ -112,6 +114,29 @@ export default function HomePage() {
                 console.log(error);
             }) // it did not work
 
+    }
+    async function logout() {
+        const data ={
+            userName: userName,
+        };
+        
+        const options ={
+            method: 'POST',
+            credentials: 'include',
+        };
+        const response = fetch("/logout", options)
+        .then((res) => res.json())
+        .then((apiRes) => {
+            console.log(apiRes);
+            transfer();
+            setShouldRedirect(true);
+        })
+        .catch((error) =>{
+            console.log(error);
+        })
+    }
+    if (shouldRedirect) {
+        return <Navigate to="/home" replace={true} />;
     }
 
     async function updateTable() {
@@ -211,7 +236,10 @@ export default function HomePage() {
     return (
         <div>
             <h1>Home Page</h1>
-
+            <div>
+                    {/* <a href='/login' onClick={logout}>Logout</a> */}
+                    <button class="btn btn-outline-primary float-right" onClick={logout}><a href='/login'>Logout</a></button> 
+                </div>
             <div class="card">
                 <p class="card-header">Welcome back, <b>{userName}</b></p>
                 <div class="card-body">
