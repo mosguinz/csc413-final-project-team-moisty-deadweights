@@ -7,6 +7,7 @@ public class HandlerFactory {
     public static BaseHandler getHandler(ParsedRequest request) {
         return switch (request.getPath()) {
             case "/createUser" -> new CreateUserHandler();
+            case "/idToUser" -> new IdToUserHandler();
             case "/createDeposit" -> new CreateDepositHandler();
             case "/getTransactions" -> new GetTransactionsHandler();
             case "/getRequests" -> new GetRequestsHandler();

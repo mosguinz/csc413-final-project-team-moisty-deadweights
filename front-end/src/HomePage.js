@@ -26,7 +26,9 @@ export default function HomePage() {
 
     const [amount, setAmount] = React.useState('');
     const [transactions, setTransactions] = React.useState([]);
+    const [idToUserTable] = React.useState({});
     const [userName, setUserName] = React.useState('');
+    const [userId, setUserId] = React.useState('');
     const [balance, setbalance] = React.useState('');
 
     function updateAmount(event) {
@@ -85,24 +87,25 @@ export default function HomePage() {
         // https://react.dev/reference/react/useEffect
         // fetching data
         // https://developer.mozilla.org/en-US/docs/Web/API/fetch
-        fetchTransaction();
+        fetchTransaction()
         updateUser();
-    }, []);
+    }, [transactions]);
 
         /*
          * Get the user by using thier cookie
          *
          */
-    function updateUser() {
+    async function updateUser() {
         const options = {
             method: 'POST',
             credentials: 'include',
         };
-        fetch('/getUser', options)
+        await fetch('/getUser', options)
             .then((res) => res.json())
             .then((apiRes) => {
                 setUserName(apiRes.data[0].userName);
                 setbalance(apiRes.data[0].balance);
+                setUserId(apiRes.data[0].uniqueId);
             })
             .catch((error) => {
                 setAmount('');
@@ -111,30 +114,61 @@ export default function HomePage() {
 
     }
 
-    function fetchTransaction() {
-        fetch('/getTransactions')
-            .then((res) => res.json())
-            .then((apiRes) => {
-                // will see transactions here as they come
-                setTransactions(apiRes.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            }) // it did not work
+    async function updateTable() {
+        transactions.filter((transaction) => {
+            return transaction.transactionType.toString() == "Transfer";
+        })
+        .forEach( async (transfer) => {
+            var toUser = await idToUser(transfer.toId);
+            idToUserTable[transfer.toId] = toUser;
+            var fromUser = await idToUser(transfer.userId);
+            idToUserTable[transfer.userId] = fromUser;
+        });
     }
 
-    function search() {
-        window.location.href='/search';
+    /**
+     * Make the card for listing transactions.
+     * @param {String} id
+     */
+    async function idToUser(id) {
+        const options = {
+            method: 'POST',
+            Headers: { q : id },
+            credentials: 'include',
+        };
+        const res = await fetch('/getUser', options);
+        var apiRes = await res.json()
+        return apiRes.data[0].userName;
+    }
+
+
+    /*
+     * Get the transactions for the given user
+     */
+    async function fetchTransaction() {
+        await updateUser();
+        var res = await fetch('/getTransactions');
+        var apiRes = await res.json();
+        setTransactions(apiRes.data);
+        await updateTable();
+    }
+
+    /*
+     * set button to redirect to transfer page
+     */
+    function transfer() {
+        window.location.href='/transfer';
     }
 
     /**
      * Make the card for listing transactions.
      * @param {TransactionDto} txDto
-     * @param {} currentUserDto
      */
-    function makeTxCard(txDto, currentUserDto) {
+    function makeTxCard(txDto) {
         let txMessage;
         let amountPrefix;
+        var sender = idToUserTable[txDto.userId];
+        var receiver = idToUserTable[txDto.toId];
 
         switch (txDto.transactionType) {
             case "Deposit":
@@ -142,12 +176,12 @@ export default function HomePage() {
                 amountPrefix = "+";
                 break;
             case "Transfer":
-                if (currentUserDto.username === txDto.userId) {
-                    txMessage = <h5 className="card-title"><b>${txDto.userId}</b> paid <b>you</b></h5>;
+                if (txDto.toId === userId) {
+                    txMessage = <h5 className="card-title"><b>{ sender }</b> paid <b>you</b></h5>;
                     amountPrefix = "+";
                     break;
                 }
-                txMessage = <h5 className="card-title"><b>You</b> paid <b>anotherguy</b></h5>;
+                txMessage = <h5 className="card-title"><b>You</b> paid <b>{receiver}</b></h5>;
                 amountPrefix = "-";
                 break;
             case "Withdraw":
@@ -187,7 +221,7 @@ export default function HomePage() {
                             <b class="fs-1">${balance}</b>
                         </div>
                         <div class="col-md-4 d-grid text-center">
-                            <button type="button" class="btn btn-primary" onClick={search}>Pay or Request</button>
+                            <button type="button" class="btn btn-primary" onClick={transfer}>Pay or Request</button>
                         </div>
                     </div>
                 </div>

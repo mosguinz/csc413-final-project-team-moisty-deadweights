@@ -34,6 +34,7 @@ public class CreateDepositHandler implements BaseHandler {
 
         var userDto = userLookup.get(0);
         txDto.setTransactionType(TransactionType.Deposit);
+        txDto.setUserId( authRes.userId );
         txDao.put(txDto);
 
         userDto.setBalance(userDto.getBalance() + txDto.getAmount());
