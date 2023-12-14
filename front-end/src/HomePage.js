@@ -89,7 +89,7 @@ export default function HomePage() {
         // https://developer.mozilla.org/en-US/docs/Web/API/fetch
         fetchTransaction()
         updateUser();
-    }, [transactions]);
+    }, []);
 
         /*
          * Get the user by using thier cookie
